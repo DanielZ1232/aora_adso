@@ -1,7 +1,7 @@
 import { SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
-
+import GlobalPrivider from '../context/GlobalProvider';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -27,6 +27,7 @@ const RootLayout = () => {
 
 
   return (
+  <GlobalPrivider>  
         <Stack>
           <Stack.Screen name="index" 
           options={{ headerShown: false }} />
@@ -34,9 +35,10 @@ const RootLayout = () => {
           options={{ headerShown: false }} />
           <Stack.Screen name="(tabs)" 
           options={{ headerShown: false }} />
-          <Stack.Screen name="/search/[query]" 
-          options={{ headerShown: false }} />
+          {/* <Stack.Screen name="search/[query]" 
+          options={{ headerShown: false }} /> */}
         </Stack>
+  </GlobalPrivider>
   ); 
 };
 

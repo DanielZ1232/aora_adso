@@ -1,6 +1,6 @@
 import { View, Text, Image } from 'react-native'
-import { Tabs, Redirect } from 'expo-router';
-import { icons } from '../../constants';
+import { Tabs } from 'expo-router';
+import { icons } from "../../constants";
 
 const TabIcon = ({ icon, color, name, focused}) => {
   return (
@@ -11,8 +11,10 @@ const TabIcon = ({ icon, color, name, focused}) => {
         tintColor={color}
         className="w-6 h-6"
       />
-      <Text className={`${focused ? 'font-psemibold' : 
-        'font-pregular'} text-xs`} style={{ color: color }}>
+      <Text
+        className={`${focused ? "font-psemibold" : "font-pregular"} text-xs`}
+        style={{ color: color }}
+      >
         {name}
       </Text>
     </View>
@@ -104,4 +106,4 @@ const TabsLayout = () => {
   )
 }
 
-export default TabsLayout
+export default TabsLayout;

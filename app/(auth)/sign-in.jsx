@@ -1,21 +1,42 @@
-import { View, Text, ScrollView, Image } from 'react-native'
+import { View, Text, ScrollView, Image, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Link } from 'expo-router'
+import { Link, router } from 'expo-router'
 
 import { images } from '../../constants';
 import FormField from '../../components/FormField';
 import CustomButton from '../../components/CustomButton';
+import { getCurrentUser, signIn } from '../../lib/appwrite';
+import { useGlobalContext } from '../../context/GlobalProvider';
+
 const SignIn = () => {
+  const { setUser, setIsLogged } = useGlobalContext();
   const [form, setform] = useState({
     email: '',
     password: ''
   })
 
-  const [isSubmitting, setisSubmitting] = useState(false)
+  const [isSubmitting, setisSubmitting] = useState(false);
 
-  const submit = () => {
+  const submit = async () => {
+    if (form.email==="" || form.password==="") {
+      Alert.alert('Error', 'Please fill in all the fields')
+    }
 
+    setisSubmitting(true);
+    try {
+      await signIn(form.email, form.password);
+      const result = await getCurrentUser();
+      setUser(result);
+      setIsLogged(true);
+
+      Alert.alert("Success", "User signed in seccessfully");
+      router.replace('/home');  
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    } finally {
+      setisSubmitting(false);
+    }
   }
   
   return (
@@ -33,16 +54,16 @@ const SignIn = () => {
           <FormField 
             title="Email"
             value={form.email}
-            handleChangeText={(e) => setform({ ...form,
+            handleChangetext={(e) => setform({ ...form,
               email: e })}
               otherStyles="mt-7"
               keyboardType="email-address"
           />
 
           <FormField 
-            title="password"
+            title="Password"
             value={form.password}
-            handleChangeText={(e) => setform({ ...form,
+            handleChangetext={(e) => setform({ ...form,
               password: e })}
               otherStyles="mt-7"
           />
@@ -50,7 +71,7 @@ const SignIn = () => {
           <CustomButton 
             title="Sign In"
             handlePress={submit}
-            containerStyles="mt-7"
+            containerStyles={{ marginTop: 20 }}
             isLoading={isSubmitting}
           />
 
@@ -60,8 +81,9 @@ const SignIn = () => {
             font-pregular">
               Don't have account?
             </Text>
-            <Link href="/sign-up" className="text-lg
-            font-psemibold text-secondary">Sign Up</Link>
+              <Link href="/sign-up" 
+              style={{ fontSize: 18, fontFamily: 'PSemibold', color: '#FF9F1C' }}>
+                Sign Up</Link>
           </View>
         </View>
       </ScrollView>
